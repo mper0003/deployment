@@ -1,0 +1,36 @@
+kind: Namespace
+apiVersion: v1
+metadata: # kpt-merge: /mper0003
+  name: backend
+  annotations:
+    internal.kpt.dev/upstream-identifier: '|Namespace|default|mper0003'
+---
+kind: LimitRange
+apiVersion: v1
+metadata: # kpt-merge: mper0003/defaults-limit-range
+  name: defaults-limit-range
+  namespace: backend
+  annotations:
+    internal.kpt.dev/upstream-identifier: '|LimitRange|mper0003|defaults-limit-range'
+spec:
+  limits:
+    - default:
+        cpu: "0.5"
+        memory: 1Gi
+      defaultRequest:
+        cpu: "0.2"
+        memory: 256Mi
+      type: Container
+---
+kind: ResourceQuota
+apiVersion: v1
+metadata: # kpt-merge: mper0003/pod-limits
+  name: pod-limits
+  namespace: backend
+  annotations:
+    internal.kpt.dev/upstream-identifier: '|ResourceQuota|mper0003|pod-limits'
+spec:
+  hard:
+    limits.cpu: "10"
+    limits.memory: 10Gi
+    pods: "10"
